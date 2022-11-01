@@ -17,7 +17,10 @@ def setup_logger():
     logger.setLevel(level=0)
 
     file_name = Properties.get(LOGGING).get(LOGGING_LOG_FILE_PATH)
-    clean_directory("".join(file_name.split("/")[:-1]))
+    directory = "".join(file_name.split("/")[:-1])
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    clean_directory(directory)
     rf_handler = RotatingFileHandler(file_name, maxBytes=Properties.get(LOGGING).get(LOGGING_MAX_FILE_SIZE),
                                      backupCount=Properties.get(LOGGING).get(LOGGING_BACKUP_COUNT))
     rf_handler.setLevel(level=Properties.get(LOGGING).get(LOGGING_FILE_LOG_LEVEL))
