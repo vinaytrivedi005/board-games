@@ -1,0 +1,54 @@
+{
+  "X": "X",
+  "O": "O",
+  "ttt_pieces": ["X", "O"],
+  "winning_positions": [
+    7,
+    56,
+    73,
+    84,
+    146,
+    273,
+    292,
+    448
+  ],
+  "game_states": {
+    "win_x": 1,
+    "win_o": -1,
+    "draw": 0,
+    "in_progress": 2
+  },
+  "ttt_square_to_index": {
+    "a1": 0,
+    "b1": 1,
+    "c1": 2,
+    "a2": 3,
+    "b2": 4,
+    "c2": 5,
+    "a3": 6,
+    "b3": 7,
+    "c3": 8
+  },
+  "ttt_index_to_square": {
+    "0": "a1",
+    "1": "b1",
+    "2": "c1",
+    "3": "a2",
+    "4": "b2",
+    "5": "c2",
+    "6": "a3",
+    "7": "b3",
+    "8": "c3"
+  },
+  "ttt_pretty_board": "---------------------\n3 |  {6}  |  {7}  |  {8}  |\n--|-----|-----|-----|\n2 |  {3}  |  {4}  |  {5}  |\n--|-----|-----|-----|\n1 |  {0}  |  {1}  |  {2}  |\n--|-----|-----|-----|\n  |  a  |  b  |  c  |",
+  "ttt_width": 3,
+  "ttt_length": 3,
+  "logging": {
+    "file_log_level":  0,
+    "console_log_level": 30,
+    "logger_name": "game_logger",
+    "log_file_path": "logs/games.log",
+    "max_file_size": 200000000,
+    "backup_count": 50
+  }
+}
