@@ -2,39 +2,42 @@ import numpy as np
 
 from src.boards.board import Board
 from src.utilities.constants import *
-from src.utilities.properties import Properties
 from src.utilities.exceptions import InvalidMoveException
+from src.utilities.properties import Properties
 
 
-class TicTacToeBoard(Board):
+class Connect4Board(Board):
     """
-    This class is designed to implement API to manipulate tic tac toe board.
+    This class is designed to implement API to manipulate connect4 board.
     We will always mark board with the perspective of X, marking files(columns) as a, b, c from left to right and
     ranks(rows) as 1, 2, 3 from bottom to top.
-    3 __|__|__
-    2 __|__|__
-    1   |  |
-      a  b  c
+    6 __|__|__|__|__|__|__
+    5 __|__|__|__|__|__|__
+    4 __|__|__|__|__|__|__
+    3 __|__|__|__|__|__|__
+    2 __|__|__|__|__|__|__
+    1   |  |  |  |  |  |
+      a  b  c  d  e  f  g
     Thus, each square will be represented by a letter followed by a number, i.e. a1, b3, c2 etc.
     The board will be described using two integers for X and O.
-    The last 9 bits of integer will each hold the value for presence of particular piece, i.e. if X is present at
+    The last 42 bits of integer will each hold the value for presence of particular piece, i.e. if X is present at
     a3 then 7th bit will have 1 in int X.
 
     """
 
-    def __init__(self, X: int = 0, O: int = 0, turn_order=[], board_name="TicTacToeBoard"):
+    def __init__(self, X: int = 0, O: int = 0, turn_order=[], board_name="Connect4Board"):
         """
         initializes tic tac toe board with given squares of Xs by X and Os by O. default 0, 0.
         :param X:
         :param O:
         """
-        super().__init__(pieces=Properties.get(TTT_PIECES), board_name=board_name)
+        super().__init__(pieces=Properties.get(CONNECT4_PIECES), board_name=board_name)
         self.__X = X
         self.__O = O
         self.__turn_order = turn_order if turn_order else self.pieces
         self.__turn = self.__turn_order[0]
-        self.__board_length = Properties.get(TTT_LENGTH)
-        self.__board_width = Properties.get(TTT_WIDTH)
+        self.__board_length = Properties.get(CONNECT4_LENGTH)
+        self.__board_width = Properties.get(CONNECT4_WIDTH)
         self.__moves = list()
         self.__result = None
 
@@ -108,15 +111,15 @@ class TicTacToeBoard(Board):
         if self.__result is not None:
             return self.__result
         if self.__evaluate_win_x():
-            return Properties.get(TTT_GAME_STATES).get(TTT_GAME_STATES_WIN_X)
+            return Properties.get(CONNECT4_GAME_STATES).get(CONNECT4_GAME_STATES_WIN_X)
         if self.__evaluate_win_o():
-            return Properties.get(TTT_GAME_STATES).get(TTT_GAME_STATES_WIN_O)
+            return Properties.get(CONNECT4_GAME_STATES).get(CONNECT4_GAME_STATES_WIN_O)
         if self.__evaluate_draw():
-            return Properties.get(TTT_GAME_STATES).get(TTT_GAME_STATES_DRAW)
-        return Properties.get(TTT_GAME_STATES).get(TTT_GAME_STATES_IN_PROGRESS)
+            return Properties.get(CONNECT4_GAME_STATES).get(CONNECT4_GAME_STATES_DRAW)
+        return Properties.get(CONNECT4_GAME_STATES).get(CONNECT4_GAME_STATES_IN_PROGRESS)
 
     def __evaluate_win_x(self):
-        winning_positions = Properties.get(TTT_WINNING_POSITIONS)
+        winning_positions = Properties.get(CONNECT4_WINNING_POSITIONS)
 
         for winning_position in winning_positions:
             if self.X & winning_position == winning_position:
@@ -125,7 +128,7 @@ class TicTacToeBoard(Board):
         return False
 
     def __evaluate_win_o(self):
-        winning_positions = Properties.get(TTT_WINNING_POSITIONS)
+        winning_positions = Properties.get(CONNECT4_WINNING_POSITIONS)
 
         for winning_position in winning_positions:
             if self.O & winning_position == winning_position:
@@ -135,12 +138,12 @@ class TicTacToeBoard(Board):
 
     def __evaluate_draw(self):
         """
-        Because there are 9 squares in the board, if all squares have a piece without the result, the OR of both X and
-        O pieces will be 2^9 - 1.
+        Because there are 42 squares in the board, if all squares have a piece without the result, the OR of both X and
+        O pieces will be 2^42 - 1.
 
         :return: True if all positions in the board are filled, False otherwise.
         """
-        return (self.X | self.O) == 2**9 - 1
+        return (self.X | self.O) == (2 ** 42 - 1)
 
     def get_pretty_board(self):
         """
@@ -167,7 +170,7 @@ class TicTacToeBoard(Board):
                 pretty_pieces.append(' ')
             and_op = and_op << 1
 
-        pretty_board = Properties.get(TTT_PRETTY_BOARD)
+        pretty_board = Properties.get(CONNECT4_PRETTY_BOARD)
         pretty_board = pretty_board.format(*pretty_pieces)
 
         return pretty_board
@@ -250,9 +253,9 @@ class TicTacToeBoard(Board):
         if self.__turn != turn_order[0]:
             turn_order = turn_order[::-1]
 
-        tttb = TicTacToeBoard(self.X, self.O, turn_order)
+        connect4b = Connect4Board(self.X, self.O, turn_order)
 
-        return tttb
+        return connect4b
 
     def get_next_board_states(self, piece):
         """
@@ -265,9 +268,9 @@ class TicTacToeBoard(Board):
 
         board_states = dict()
         for move in possible_moves:
-            tttb = self.deep_copy()
-            tttb.insert(move)
-            board_states[move] = tttb
+            connect4b = self.deep_copy()
+            connect4b.insert(move)
+            board_states[move] = connect4b
 
         return board_states
 
@@ -282,7 +285,7 @@ class TicTacToeBoard(Board):
             return False
 
         power = self.__convert(square=square)
-        if power is None or power not in range(0, 9):
+        if power is None or power not in range(0, 42):
             return False
 
         if self.X & 2 ** power != 0 or self.O & 2 ** power != 0:
@@ -308,10 +311,10 @@ class TicTacToeBoard(Board):
             return self.__convert_index_to_square(index)
 
     def __convert_square_to_index(self, square):
-        return Properties.get(TTT_SQUARE_TO_INDEX).get(square)
+        return Properties.get(CONNECT4_SQUARE_TO_INDEX).get(square)
 
     def __convert_index_to_square(self, index):
-        return Properties.get(TTT_INDEX_TO_SQUARE).get(str(index))
+        return Properties.get(CONNECT4_INDEX_TO_SQUARE).get(str(index))
 
     def __eq__(self, other):
         if self.X != other.X:
@@ -343,13 +346,13 @@ class TicTacToeBoard(Board):
         self.__turn = self.__turn_order[next_turn_id]
 
     def is_terminal_state(self):
-        return True if self.evaluate() != Properties.get(TTT_GAME_STATES).get(TTT_GAME_STATES_IN_PROGRESS) else False
+        return True if self.evaluate() != Properties.get(CONNECT4_GAME_STATES).get(
+            CONNECT4_GAME_STATES_IN_PROGRESS) else False
 
     def __str__(self):
-        board = f"TicTacToeBoard: (X: {self.X:b}, O: {self.O:b}, turn: {self.turn}, turn_order: {self.__turn_order})"
+        board = f"Connect4Board: (X: {self.X:b}, O: {self.O:b}, turn: {self.turn}, turn_order: {self.__turn_order})"
         return board
 
     def __repr__(self):
-        board = f"TicTacToeBoard: (X: {self.X:b}, O: {self.O:b}, turn: {self.turn}, turn_order: {self.__turn_order})"
+        board = f"Connect4Board: (X: {self.X:b}, O: {self.O:b}, turn: {self.turn}, turn_order: {self.__turn_order})"
         return board
-
