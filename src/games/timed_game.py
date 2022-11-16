@@ -7,7 +7,7 @@ from src.boards.board import Board
 from src.clocks.clock import Clock
 from src.games.game import Game
 from src.players.timed_player import TimedPlayer
-from src.utilities.constants import GAME_STATES, GAME_STATES_IN_PROGRESS
+from src.utilities.constants import TTT_GAME_STATES, TTT_GAME_STATES_IN_PROGRESS
 from src.utilities.exceptions import TimeoutException
 from src.utilities.properties import Properties
 import logging
@@ -52,10 +52,11 @@ class TimedGame(Game):
         if verbose:
             print(self.board.get_pretty_board())
         log(DEBUG, "{}\n\n".format(self.board.get_pretty_board()))
-        while self.board.evaluate() == Properties.get(GAME_STATES).get(GAME_STATES_IN_PROGRESS):
+        while not self.board.is_terminal_state():
+            print(f'Turn: {self.turn}')
             start_time = time.time_ns()
 
-            self.__clocks[self.turn].start()
+            self.get_clock(self.turn).start()
             try:
                 self.__move(self.turn)
             except TimeoutException as te:
@@ -63,7 +64,7 @@ class TimedGame(Game):
                 #  decide how to continue the game with other players
                 log(ERROR, f"timeout for player: {self.turn}")
                 break
-            self.__clocks[self.turn].stop()
+            self.get_clock(self.turn).stop()
             self._switch_turn()
             log(DEBUG, "{}\n\n".format(self.board.get_pretty_board()))
             end_time = time.time_ns()
@@ -78,7 +79,7 @@ class TimedGame(Game):
 
     def __move(self, player: TimedPlayer):
         move = None
-        clock = self.__clocks[player]
+        clock = self.get_clock(player)
         time_for_move = clock.time_for_move()
         it = 0
 

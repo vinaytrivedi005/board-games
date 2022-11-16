@@ -9,5 +9,5 @@ class TimedPlayer(Player):
         super().__init__(name=name)
 
     @abstractmethod
-    def move(self, game):
+    def move(self, game, time_for_move=1):
         pass

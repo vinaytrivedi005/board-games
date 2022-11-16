@@ -1,8 +1,6 @@
 import time
 from typing import List, Dict
 
-from src.utilities.properties import Properties
-from src.utilities.constants import *
 from src.boards.board import Board
 from src.players.player import Player
 from logging import INFO
@@ -42,7 +40,7 @@ class Game:
     def play(self, verbose = False):
         if verbose:
             print(self.board.get_pretty_board())
-        while self.board.evaluate() == Properties.get(GAME_STATES).get(GAME_STATES_IN_PROGRESS):
+        while not self.board.is_terminal_state():
             start_time = time.time_ns()
             self.__move(self.turn)
             self._switch_turn()
@@ -68,8 +66,8 @@ class Game:
         #     self.turn = Properties.get(X)
 
         next_turn_id = 0
-        for i in range(len(self.__turn_order)):  # turn_order: [O, X]
-            if self.__turn_order[i] == self.turn:  # turn = O
-                next_turn_id = (i + 1) % len(self.__turn_order)
+        for i in range(len(self.turn_order)):  # turn_order: [O, X]
+            if self.turn_order[i] == self.turn:  # turn = O
+                next_turn_id = (i + 1) % len(self.turn_order)
                 break
-        self.turn = self.__turn_order[next_turn_id]
+        self.turn = self.turn_order[next_turn_id]

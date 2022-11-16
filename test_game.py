@@ -18,14 +18,16 @@ def test(game_no):
     ex1 = ExpanderFactory.get_instance().get_expander(expander_id=ExpanderFactory.RANDOM_EXPANDER, evaluator=ev1)
     ex2 = ExpanderFactory.get_instance().get_expander(expander_id=ExpanderFactory.RANDOM_EXPANDER, evaluator=ev2)
 
-    tp1 = PlayerFactory.get_instance().get_player(ex1 if game_no % 2 == 0 else ex2,
-                                                  player_id=PlayerFactory.GENERAL_PLAYER, name="gp1")
-    tp2 = PlayerFactory.get_instance().get_player(ex1 if game_no % 2 == 1 else ex2,
-                                                  player_id=PlayerFactory.GENERAL_PLAYER, name="gp2")
+    # tp1 = PlayerFactory.get_instance().get_player(ex1 if game_no % 2 == 0 else ex2,
+    #                                               player_id=PlayerFactory.GENERAL_PLAYER, name="gp1")
+    tp1 = PlayerFactory.get_instance().get_player(player_id=PlayerFactory.HUMAN_PLAYER, name="hp1")
+    # tp2 = PlayerFactory.get_instance().get_player(ex1 if game_no % 2 == 1 else ex2,
+    #                                               player_id=PlayerFactory.GENERAL_PLAYER, name="gp2")
+    tp2 = PlayerFactory.get_instance().get_player(player_id=PlayerFactory.HUMAN_PLAYER, name="hp2")
 
-    c1 = ClockFactory.get_instance().get_clock(clock_id=ClockFactory.TIME_PER_MOVE_CLOCK, time_per_move=10,
+    c1 = ClockFactory.get_instance().get_clock(clock_id=ClockFactory.TIME_PER_MOVE_CLOCK, time_per_move=60,
                                                stop_time_delta=1e-8)
-    c2 = ClockFactory.get_instance().get_clock(clock_id=ClockFactory.TIME_PER_MOVE_CLOCK, time_per_move=10,
+    c2 = ClockFactory.get_instance().get_clock(clock_id=ClockFactory.TIME_PER_MOVE_CLOCK, time_per_move=60,
                                                stop_time_delta=1e-8)
 
     tg = GameFactory.get_instance().get_game(board, [tp1, tp2], [tp1, tp2], {tp1: c1, tp2: c2},
@@ -35,6 +37,6 @@ def test(game_no):
 
 
 if __name__ == '__main__':
-    for i in range(1, 11):
+    for i in range(1, 2):
         print('GAME:', i)
         test(i)

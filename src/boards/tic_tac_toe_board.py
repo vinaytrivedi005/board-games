@@ -20,6 +20,9 @@ class TicTacToeBoard(Board):
     The last 9 bits of integer will each hold the value for presence of particular piece, i.e. if X is present at
     a3 then 7th bit will have 1 in int X.
 
+    X = 000 ... 010 000 001 32 bit
+    O = 000 ... 000 000 100 32 bit
+
     """
 
     def __init__(self, X: int = 0, O: int = 0, turn_order=[], board_name="TicTacToeBoard"):
@@ -93,6 +96,13 @@ class TicTacToeBoard(Board):
         self.__switch_turn()
 
     def __insert_x(self, square):
+        """
+        X = 000 000 000
+        X = 0 + 2**3 = 0 + 8 = 8 = 000 001 000
+        X = 8 + 2**5 = 8 + 32 = 40 = 000 101 000
+        :param square:
+        :return:
+        """
         power = self.__convert(square=square)
         self.__X += 2 ** power
 
@@ -103,6 +113,26 @@ class TicTacToeBoard(Board):
     def evaluate(self) -> int:
         """
         Evaluate the board position weather it is win for X, O, Draw or InProgress.
+
+        3 _6_|_7_|_8_
+        2 _3_|_4_|_5_
+        1  0 | 1 | 2
+           a   b   c
+
+        000 000 111 [0, 1, 2] = 7
+        000 111 000 [3, 4, 5] = 56
+        111 000 000 [6, 7, 8] =
+        100 100 100 [8, 5, 2]
+        010 010 010 [7, 4, 1]
+        001 001 001 [6, 3, 0]
+        100 010 001 [8, 4, 0]
+        001 010 100 [6, 4, 2]
+
+        X = 000 000 000
+        X = 0 + 2**3 = 0 + 8 = 8 = 000 001 000
+        X = 8 + 2**5 = 8 + 32 = 40 = 000 101 000
+        X = 8 + 2**0 = 40 + 1 = 41 = 000 101 001
+        X = 8 + 2**4 = 41 + 16 = 57 = 000 111 001 & 000 111 000 = 000 111 000
         :return: 0=Draw, 1=X win, -1=O win, 2=InProgress
         """
         if self.__result is not None:
@@ -137,6 +167,11 @@ class TicTacToeBoard(Board):
         """
         Because there are 9 squares in the board, if all squares have a piece without the result, the OR of both X and
         O pieces will be 2^9 - 1.
+
+        X = 010 110 101
+        OR
+        O = 101 001 010
+            111 111 111 = 512 - 1 = 2**9 - 1
 
         :return: True if all positions in the board are filled, False otherwise.
         """
@@ -274,6 +309,9 @@ class TicTacToeBoard(Board):
     def is_valid_move(self, square):
         """
         validate the move on a particular square:
+
+        X = 000 100 000 & 2**5 = 000 100 000 & 000 100 000 =
+        O = position 5
 
         :param square:
         :return:

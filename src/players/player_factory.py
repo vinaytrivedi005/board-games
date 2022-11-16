@@ -37,17 +37,17 @@ class PlayerFactory:
     def __random_player(self, *args, **kwargs):
         return RandomPlayer(*args, **kwargs)
 
-    def __human_player(self, *args, **kargs):
-        return HumanPlayer(*args, *kargs)
+    def __human_player(self, *args, **kwargs):
+        return HumanPlayer(*args, **kwargs)
 
-    def __general_player(self, *args, **kargs):
-        return GeneralPlayer(*args, *kargs)
+    def __general_player(self, *args, **kwargs):
+        return GeneralPlayer(*args, **kwargs)
 
-    def __minimax_player(self, *args, **kargs):
-        return MiniMaxPlayer(*args, *kargs)
+    def __minimax_player(self, *args, **kwargs):
+        return MiniMaxPlayer(*args, **kwargs)
 
-    def __mcts_player(self, *args, **kargs):
-        return MCTSPlayer(*args, *kargs)
+    def __mcts_player(self, *args, **kwargs):
+        return MCTSPlayer(*args, **kwargs)
 
     def __default(self, *args, **kwargs):
         raise ValueError("No such expander exists.")
