@@ -53,7 +53,7 @@ class TimedGame(Game):
             print(self.board.get_pretty_board())
         log(DEBUG, "{}\n\n".format(self.board.get_pretty_board()))
         while not self.board.is_terminal_state():
-            print(f'Turn: {self.turn}')
+            log(INFO, f'Turn: {self.turn}')
             start_time = time.time_ns()
 
             self.get_clock(self.turn).start()

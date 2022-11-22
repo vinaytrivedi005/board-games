@@ -1,12 +1,12 @@
-import time
+import random
 
 from src.games.game import Game
 from src.players.timed_player import TimedPlayer
 
 
-class HumanPlayer(TimedPlayer):
+class TimedRandomPlayer(TimedPlayer):
 
-    def __init__(self, expander=None, name: str = "HumanPlayer"):
+    def __init__(self, expander=None, name: str = "TimedRandomPlayer"):
         super().__init__(name=name)
         self.__pondering = False
 
@@ -18,8 +18,7 @@ class HumanPlayer(TimedPlayer):
         while move not in possible_moves:
             if pc.is_stop_time():
                 break
-            print(f'You have {pc.time_for_move() // 1e9} seconds to move.')
-            move = input(f"please enter your move out of possible moves {possible_moves}: ")
+            move = random.choice(possible_moves)
         self.__pondering = False
         return move
 

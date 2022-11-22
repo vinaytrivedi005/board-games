@@ -3,12 +3,14 @@ from src.players.human_player import HumanPlayer
 from src.players.general_player import GeneralPlayer
 from src.players.minimax_player import MiniMaxPlayer
 from src.players.mcts_player import MCTSPlayer
+from src.players.timed_random_player import TimedRandomPlayer
 
 
 class PlayerFactory:
     __instance = None
 
     RANDOM_PLAYER = "_PlayerFactory__random_player"
+    TIMED_RANDOM_PLAYER = "_PlayerFactory__timed_random_player"
     MINIMAX_PLAYER = "_PlayerFactory__minimax_player"
     GENERAL_PLAYER = "_PlayerFactory__general_player"
     HUMAN_PLAYER = "_PlayerFactory__human_player"
@@ -36,6 +38,9 @@ class PlayerFactory:
 
     def __random_player(self, *args, **kwargs):
         return RandomPlayer(*args, **kwargs)
+
+    def __timed_random_player(self, *args, **kwargs):
+        return TimedRandomPlayer(*args, **kwargs)
 
     def __human_player(self, *args, **kwargs):
         return HumanPlayer(*args, **kwargs)

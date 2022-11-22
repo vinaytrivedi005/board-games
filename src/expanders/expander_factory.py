@@ -1,3 +1,4 @@
+from src.expanders.evaluator_based_expander import EvaluatorBasedExpander
 from src.expanders.random_expander import RandomExpander
 
 
@@ -5,6 +6,7 @@ class ExpanderFactory:
     __instance = None
 
     RANDOM_EXPANDER = "_ExpanderFactory__random_expander"
+    EVALUATOR_BASED_EXPANDER = "_ExpanderFactory__evaluator_based_expander"
 
     def __init__(self):
         if ExpanderFactory.__instance is not None:
@@ -28,6 +30,9 @@ class ExpanderFactory:
 
     def __random_expander(self, *args, **kwargs):
         return RandomExpander(*args, **kwargs)
+
+    def __evaluator_based_expander(self, *args, **kwargs):
+        return EvaluatorBasedExpander(*args, **kwargs)
 
     def __default(self, *args, **kwargs):
         raise ValueError("No such expander exists.")

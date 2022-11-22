@@ -1,6 +1,7 @@
 from src.evaluators.board_state_evaluator import BoardStateEvaluator
 from src.evaluators.random_evaluator import RandomEvaluator
 from src.evaluators.random_simulation_evaluator import RandomSimulationEvaluator
+from src.evaluators.tic_tac_toe_nn_evaluator import TicTacToeNNEvaluator
 
 
 class EvaluatorFactory:
@@ -9,13 +10,12 @@ class EvaluatorFactory:
     RANDOM_EVALUATOR = "_EvaluatorFactory__random_evaluator"
     RANDOM_SIMULATION_EVALUATOR = "_EvaluatorFactory__random_simulation_evaluator"
     BOARD_STATE_EVALUATOR = "_EvaluatorFactory__board_state_evaluator"
+    TIC_TAC_TOE_NN_EVALUATOR = "_EvaluatorFactory__tic_tac_toe_nn_evaluator"
 
     def __init__(self):
         if EvaluatorFactory.__instance is not None:
             raise NotImplementedError("singleton class cannot be instantiated")
-        self.__evaluators = {EvaluatorFactory.RANDOM_EVALUATOR: RandomEvaluator(),
-                             EvaluatorFactory.RANDOM_SIMULATION_EVALUATOR: RandomSimulationEvaluator(),
-                             EvaluatorFactory.BOARD_STATE_EVALUATOR: BoardStateEvaluator()}
+        self.__evaluators = {}
 
     @staticmethod
     def get_instance():
@@ -33,13 +33,16 @@ class EvaluatorFactory:
         return evaluator(*args, **kwargs)
 
     def __random_evaluator(self, *args, **kwargs):
-        return self.__evaluators.get(EvaluatorFactory.RANDOM_EVALUATOR, self.__default)
+        return RandomEvaluator(*args, **kwargs)
 
     def __random_simulation_evaluator(self, *args, **kwargs):
-        return self.__evaluators.get(EvaluatorFactory.RANDOM_SIMULATION_EVALUATOR, self.__default)
+        return RandomSimulationEvaluator(*args, **kwargs)
 
     def __board_state_evaluator(self, *args, **kwargs):
-        return self.__evaluators.get(EvaluatorFactory.BOARD_STATE_EVALUATOR, self.__default)
+        return BoardStateEvaluator(*args, **kwargs)
+
+    def __tic_tac_toe_nn_evaluator(self, *args, **kwargs):
+        return TicTacToeNNEvaluator(*args, **kwargs)
 
     def __default(self, *args, **kwargs):
         raise ValueError("No such evaluator exists.")

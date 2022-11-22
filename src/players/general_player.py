@@ -4,7 +4,7 @@ from src.players.timed_player import TimedPlayer
 
 class GeneralPlayer(TimedPlayer):
 
-    def __init__(self, expander, name="GeneralTimedPlayer"):
+    def __init__(self, expander=None, name="GeneralTimedPlayer"):
         super().__init__(name=name)
         self.__expander = expander
 

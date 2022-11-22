@@ -14,6 +14,7 @@ def test(game_no):
 
     ev1 = EvaluatorFactory.get_instance().get_evaluator(evaluator_id=EvaluatorFactory.BOARD_STATE_EVALUATOR)
     ev2 = EvaluatorFactory.get_instance().get_evaluator(evaluator_id=EvaluatorFactory.RANDOM_SIMULATION_EVALUATOR)
+    ev3 = EvaluatorFactory.get_instance().get_evaluator(evaluator_id=EvaluatorFactory.RANDOM_EVALUATOR)
 
     ex1 = ExpanderFactory.get_instance().get_expander(expander_id=ExpanderFactory.RANDOM_EXPANDER, evaluator=ev1)
     ex2 = ExpanderFactory.get_instance().get_expander(expander_id=ExpanderFactory.RANDOM_EXPANDER, evaluator=ev2)
