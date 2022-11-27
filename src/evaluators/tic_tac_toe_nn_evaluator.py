@@ -40,24 +40,24 @@ class TicTacToeNNEvaluator(Evaluator):
         model = Sequential()
 
         # Pre-processing data
-        model.add(Lambda(lambda x: 0.1 if x == 0 else x, input_shape=(3, 3, 2)))
+        model.add(Lambda(lambda x: (x - 0.5) * 2, input_shape=(3, 3, 2)))
 
         # Layer 1: convolution layer, input 3 x 3 x 2, output 3 x 3 x 16
-        model.add(Convolution2D(128, (3, 3), padding='same', activation="relu",
+        model.add(Convolution2D(128, (1, 1), padding='valid', activation="relu",
                                 kernel_regularizer=tf.keras.regularizers.l2(l=0.01)))
         # Layer 2: convolution layer, input 3 x 3 x 16, output 3 x 3 x 24
-        model.add(Convolution2D(128, (3, 3), padding='same', activation="relu",
+        model.add(Convolution2D(128, (1, 1), padding='valid', activation="relu",
                                 kernel_regularizer=tf.keras.regularizers.l2(l=0.01)))
         # Layer 3: convolution layer, input 3 x 3 x 24, output 3 x 3 x 32
-        model.add(Convolution2D(128, (3, 3), padding='same', activation="relu",
+        model.add(Convolution2D(128, (1, 1), padding='valid', activation="relu",
                                 kernel_regularizer=tf.keras.regularizers.l2(l=0.01)))
         # Layer 4: convolution layer, input 3 x 3 x 32, output 3 x 3 x 40
-        model.add(Convolution2D(64, (3, 3), padding='same', activation="relu",
+        model.add(Convolution2D(64, (3, 3), padding='valid', activation="relu",
                                 kernel_regularizer=tf.keras.regularizers.l2(l=0.01)))
 
         model.add(Flatten())
 
-        model.add(Dense(128))
+        model.add(Dense(64))
         model.add(Activation("relu"))
         model.add(Dropout(0.2))
 

@@ -1,4 +1,5 @@
 import random
+
 import numpy as np
 
 from src.boards.board_factory import BoardFactory
@@ -21,7 +22,7 @@ def train_model(num_games):
 
     tic_tac_toe_nn_evaluator = EvaluatorFactory.get_instance().get_evaluator(
         evaluator_id=EvaluatorFactory.TIC_TAC_TOE_NN_EVALUATOR,
-        model_path='D:/projects/board-games/resources/models/tic_tac_toe_nn_evaluator1.tf')
+        model_path='D:/projects/board-games/resources/models/tic_tac_toe_nn_evaluator2.tf')
     X = list()
     y = list()
     for i in range(1, num_games + 1):
@@ -91,13 +92,14 @@ def test_model(num_games):
         c_id = random.choice(c_ids)
 
         ev1 = EvaluatorFactory.get_instance().get_evaluator(evaluator_id=ev_id1)
-        ev2 = EvaluatorFactory.get_instance().get_evaluator(evaluator_id=ev_id2)
+        ev2 = EvaluatorFactory.get_instance().get_evaluator(evaluator_id=ev_id2,
+                                                            model_path='D:/projects/board-games/resources/models/tic_tac_toe_nn_evaluator2.tf')
 
         ex1 = ExpanderFactory.get_instance().get_expander(expander_id=ex_id1, evaluator=ev1)
         ex2 = ExpanderFactory.get_instance().get_expander(expander_id=ex_id2, evaluator=ev2)
 
-        tp1 = PlayerFactory.get_instance().get_player(expander=ex1 if i%2 == 1 else ex2, player_id=tp_id1, name="tp1")
-        tp2 = PlayerFactory.get_instance().get_player(expander=ex2 if i%2 == 1 else ex1, player_id=tp_id2, name="tp2")
+        tp1 = PlayerFactory.get_instance().get_player(expander=ex1 if i % 2 == 1 else ex1, player_id=tp_id1, name="tp1")
+        tp2 = PlayerFactory.get_instance().get_player(expander=ex2 if i % 2 == 1 else ex2, player_id=tp_id2, name="tp2")
 
         c1 = ClockFactory.get_instance().get_clock(clock_id=c_id[0], time_per_move=c_id[1], stop_time_delta=c_id[2])
         c2 = ClockFactory.get_instance().get_clock(clock_id=c_id[0], time_per_move=c_id[1], stop_time_delta=c_id[2])
@@ -109,22 +111,24 @@ def test_model(num_games):
         if result == 0:
             results[2] += 1
         elif result == 1:
-            if i % 2 == 0:
-                results[0] += 1
-            else:
-                results[1] += 1
+            results[1] += 1
+            # if i % 2 == 0:
+            #     results[0] += 1
+            # else:
+            #     results[1] += 1
         else:
-            if i % 2 == 0:
-                results[1] += 1
-            else:
-                results[0] += 1
+            results[0] += 1
+            # if i % 2 == 0:
+            #     results[1] += 1
+            # else:
+            #     results[0] += 1
     print(results)
 
 
 if __name__ == '__main__':
     for j in range(10):
         # print('Training...')
-        # train_model(1000)
+        # train_model(100)
         # print('#'*100)
         # print('Testing...')
         test_model(10)
