@@ -40,6 +40,7 @@ class Connect4Board(Board):
         self.__board_width = Properties.get(CONNECT4_WIDTH)
         self.__moves = list()
         self.__result = None
+        assert self.is_valid_board()
 
     @property
     def X(self):
@@ -229,15 +230,16 @@ class Connect4Board(Board):
             return list()
 
         moves = list()
-        and_op = 1
 
-        board_size = self.board_length * self.board_width
-        for count in range(0, board_size):
-            piece_X = 1 if self.X & and_op else 0
-            piece_O = 1 if self.O & and_op else 0
-            if piece_X == 0 and piece_O == 0:
-                moves.append(self.__convert_index_to_square(count))
-            and_op = and_op << 1
+        for col in range(0, self.board_width):
+            for row in range(0, self.board_length):
+                index = row*self.board_width + col
+                and_op = 2**index
+                piece_X = 1 if self.X & and_op else 0
+                piece_O = 1 if self.O & and_op else 0
+                if piece_X == 0 and piece_O == 0:
+                    moves.append(self.__convert_index_to_square(index))
+                    break
 
         return moves
 
@@ -257,11 +259,10 @@ class Connect4Board(Board):
 
         return connect4b
 
-    def get_next_board_states(self, piece):
+    def get_next_board_states(self):
         """
         return all possible states of the board after inserting the piece.
 
-        :param piece: 'X' or 'O'
         :return:
         """
         possible_moves = self.get_possible_moves()
@@ -291,6 +292,13 @@ class Connect4Board(Board):
         if self.X & 2 ** power != 0 or self.O & 2 ** power != 0:
             return False
 
+        if square not in self.get_possible_moves():
+            return False
+
+        return True
+
+    def is_valid_board(self):
+        # TODO: validate board upon creation
         return True
 
     def __convert(self, square=None, index=None):
@@ -346,8 +354,7 @@ class Connect4Board(Board):
         self.__turn = self.__turn_order[next_turn_id]
 
     def is_terminal_state(self):
-        return True if self.evaluate() != Properties.get(CONNECT4_GAME_STATES).get(
-            CONNECT4_GAME_STATES_IN_PROGRESS) else False
+        return self.evaluate() != Properties.get(CONNECT4_GAME_STATES).get(CONNECT4_GAME_STATES_IN_PROGRESS)
 
     def __str__(self):
         board = f"Connect4Board: (X: {self.X:b}, O: {self.O:b}, turn: {self.turn}, turn_order: {self.__turn_order})"

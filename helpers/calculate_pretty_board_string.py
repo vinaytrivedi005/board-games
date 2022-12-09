@@ -82,7 +82,9 @@ def connect4_pretty_board(width=7, height=6):
         rank_str_tmp = '' + rank_str
 
         for _ in connect4_files:
-            rank_str_tmp = rank_str_tmp.replace(str(fcounter), ' {' + str(counter) + '} ')
+            # print(rank_str_tmp)
+            rank_str_tmp = rank_str_tmp.replace(' {} '.format(str(fcounter)), '  {' + str(counter) + '}  ')
+            # print(rank_str_tmp)
             # rank_str_tmp = rank_str_tmp.replace(str(fcounter), ' X ')
             counter -= 1
             fcounter -= 1
